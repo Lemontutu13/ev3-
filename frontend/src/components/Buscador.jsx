@@ -5,7 +5,7 @@ function Buscador({ ordenarCartas }) {
     <div className="d-flex justify-content-end mb-4">
       <select
         className="form-select w-auto"
-        onChange={(e) => ordenarCartas(e.target.value)}
+        onChange={(e) => ordenarCartas(e.target.value)}//permite ordenar por nombre y precio 
       >
         <option value="">Ordenar por...</option>
         <option value="nombre">Nombre (A-Z)</option>

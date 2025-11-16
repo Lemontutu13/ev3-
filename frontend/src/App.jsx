@@ -9,10 +9,10 @@ function App() {
   const [cartas, setCartas] = useState([]);
   const [cartasOriginales, setCartasOriginales] = useState([]);
 
-  {/* Consumo datos del backend */}
-  useEffect(() => {
+  
+  useEffect(() => { //consumo de api base de datos
     fetch('http://localhost:5000/cartas') //llamo al backend que obtiene los datos de la base de datos
-      .then(res => res.json()) //convierte la respuesta en formato json
+      .then(res => res.json()) 
       .then(data => {
         setCartas(data);
         setCartasOriginales(data); //guarda la lista para mostrarlas
@@ -24,7 +24,7 @@ function App() {
     let cartasOrdenadas = [...cartasOriginales];
 
     if (criterio === 'nombre') {
-      cartasOrdenadas.sort((a, b) => a.nombre.localeCompare(b.nombre));
+      cartasOrdenadas.sort((a, b) => a.nombre.localeCompare(b.nombre)); //ordena alfabeticamente se activa con el componente buscador
     } else if (criterio === 'precio') {
       cartasOrdenadas.sort((a, b) => a.valor - b.valor);
     }
@@ -81,7 +81,7 @@ function App() {
             Estas son las cartas más recientes agregadas a nuestra tienda. ¡Atrápalas antes de que se agoten! ⚡
           </p>
 
-          <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-4 justify-content-center">
+          <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-4 justify-content-center"> {/* uso boostrap */}
             {cartas.length > 0 ? (
               cartas
                 .slice(-4) // muestro las ultimas 4 cartas que agregue a la base de datos

@@ -1,0 +1,15 @@
+ejecutar backend
+cd backend
+npm install
+npm start
+
+ejecutar test de backend
+npm test
+
+ejecutar frontend
+cd frontend
+npm install
+npm start
+
+test frontend
+npm test

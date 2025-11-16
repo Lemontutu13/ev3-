@@ -4,11 +4,10 @@ const { Pool } = require('pg');
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Configurar conexión 
+// Configuro conexioon
 const pool = new Pool({
   user: 'postgres',       
   host: 'localhost',
@@ -17,7 +16,7 @@ const pool = new Pool({
   port: 5432,
 });
 
-// RUTA GET: obtener todas las cartas
+//obtener todas las cartas
 app.get('/cartas', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM cartas ORDER BY id ASC');
@@ -28,7 +27,7 @@ app.get('/cartas', async (req, res) => {
   }
 });
 
-// RUTA POST: agregar una nueva carta
+//agregar una nueva carta
 app.post('/cartas', async (req, res) => {
   const { nombre, tipo, psa, cantidad, valor, imagen } = req.body;
 
@@ -54,5 +53,4 @@ if (require.main === module) {
   app.listen(5000, () => console.log('✅ Servidor corriendo en http://localhost:5000'));
 }
 
-// Exportar para Jest y Supertest
 module.exports = app;

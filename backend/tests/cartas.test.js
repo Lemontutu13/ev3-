@@ -1,7 +1,5 @@
 const request = require('supertest');
 const app = require('../index.js');
-
-// Evitar que Jest se cierre antes de terminar los tests
 jest.setTimeout(10000);
 
 describe('API Cartas Pokémon', () => {

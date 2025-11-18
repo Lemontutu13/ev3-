@@ -16,37 +16,52 @@ const pool = new Pool({
   port: 5432,
 });
 
-//obtener todas las cartas
 app.get('/cartas', async (req, res) => {
+  const { nombre, tipo } = req.query;
+
   try {
-    const result = await pool.query('SELECT * FROM cartas ORDER BY id ASC');
+    let query = 'SELECT * FROM cartas';
+    let values = [];
+
+    // si filtro por tipo
+    if (tipo) {
+      query += ' WHERE tipo = $1 ORDER BY id ASC';
+      values = [tipo];
+    }
+
+    // si filtro por nombre (y NO por tipo)
+    else if (nombre) {
+      query += ' WHERE LOWER(nombre) LIKE LOWER($1) ORDER BY id ASC';
+      values = [`%${nombre}%`];
+    }
+
+    // si no hay filtros → todas las cartas
+    else {
+      query += ' ORDER BY id ASC';
+    }
+
+    const result = await pool.query(query, values);
     res.json(result.rows);
+
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Error al obtener las cartas');
+    console.error('Error al obtener cartas:', err);
+    res.status(500).send('Error al obtener cartas');
   }
 });
 
-//agregar una nueva carta
-app.post('/cartas', async (req, res) => {
-  const { nombre, tipo, psa, cantidad, valor, imagen } = req.body;
-
-  // Validación simple (evita errores por campos vacíos)
-  if (!nombre || !tipo || !psa || !cantidad || !valor || !imagen) {
-    return res.status(400).send('Todos los campos son obligatorios');
-  }
-
+// obtener lista de tipos distintos
+app.get('/tipos', async (req, res) => {
   try {
-    await pool.query(
-      'INSERT INTO cartas (nombre, tipo, psa, cantidad, valor, imagen) VALUES ($1, $2, $3, $4, $5, $6)',
-      [nombre, tipo, psa, cantidad, valor, imagen]
+    const result = await pool.query(
+      'SELECT DISTINCT tipo FROM cartas ORDER BY tipo ASC'
     );
-    res.send('Carta agregada correctamente');
+    res.json(result.rows); // [{ tipo: 'Agua' }, { tipo: 'Fuego' }, ...]
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Error al insertar carta');
+    console.error('Error al obtener tipos:', err);
+    res.status(500).send('Error al obtener tipos');
   }
 });
+
 
 // Servidor (solo se ejecuta si el archivo es el principal)
 if (require.main === module) {

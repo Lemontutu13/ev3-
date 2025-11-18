@@ -14,8 +14,6 @@ function Header() {
                     />
                     Tienda TCG
                 </a>
-
-
                 <button
                     className="navbar-toggler"
                     type="button"
